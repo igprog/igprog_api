@@ -13,27 +13,49 @@ namespace api.Data
             <div>Email: <a href=""mailto:{x.Email}?subject=Odgovor na upit"">{x.Email}</a></div>
             <div>Telefon: <a href=""tel:{x.Phone}"">{x.Phone}</a></div>
             <div>Poruka: {x.Msg}</div>";
-            x.Resp = SendMail(x.SendTo, "Novi upit", body);
+
+            MailSettings mailSetting = GetMailSettings(x.Owner);
+            x.Resp = SendMail(x.SendTo, "Novi upit", body, mailSetting);
             return x;
         }
 
-        private Response SendMail(string sendTo, string subject, string body)
+        private MailSettings GetMailSettings(string owner)
+        {
+            MailSettings x = new MailSettings();
+            switch (owner)
+            {
+                case "igprog":
+                    x.Email = "info@igprog.hr";
+                    x.Password = "Ii123456$";
+                    x.EmailName = "IG PROG";
+                    x.ServerHost = "mail.igprog.hr";
+                    x.ServerPort = 25;
+                    break;
+                case "elsolution":
+                    x.Email = "info@elsolution.hr";
+                    x.Password = "Els456789$";
+                    x.EmailName = "El. Solution";
+                    x.ServerHost = "mail.elsolution.hr";
+                    x.ServerPort = 25;
+                    break;
+                default:
+                    break;
+            }
+            return x;
+        }
+
+        private Response SendMail(string sendTo, string subject, string body, MailSettings mailSetting)
         {
             try
             {
-                string myEmail = "info@igprog.hr";
-                string myEmailName = "IG PROG";
-                string myServerHost = "mail.igprog.hr";
-                int myServerPort = 25;
-                string myPassword = "Ii123456$";
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(myEmail, myEmailName);
-                mail.To.Add(string.IsNullOrWhiteSpace(sendTo) ? myEmail : sendTo);
+                mail.From = new MailAddress(mailSetting.Email, mailSetting.EmailName);
+                mail.To.Add(string.IsNullOrWhiteSpace(sendTo) ? mailSetting.Email : sendTo);
                 mail.Subject = subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient(myServerHost, myServerPort);
-                NetworkCredential Credentials = new NetworkCredential(myEmail, myPassword);
+                SmtpClient smtp = new SmtpClient(mailSetting.ServerHost, mailSetting.ServerPort);
+                NetworkCredential Credentials = new NetworkCredential(mailSetting.Email, mailSetting.Password);
                 smtp.Credentials = Credentials;
                 smtp.Send(mail);
                 Response r = new Response();
@@ -48,6 +70,7 @@ namespace api.Data
                 r.IsSent = false;
                 r.Msg = e.Message;
                 r.Msg1 = e.StackTrace;
+                // TODO: error log
                 return r;
             }
         }
