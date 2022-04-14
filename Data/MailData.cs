@@ -44,14 +44,14 @@ namespace api.Data
             {
                 case "igprog":
                     x.Email = "info@igprog.hr";
-                    x.Password = "Ii123456$";
+                    x.Password = "Ii******$";
                     x.EmailName = "IG PROG";
                     x.ServerHost = "mail.igprog.hr";
                     x.ServerPort = 25;
                     break;
                 case "elsolution":
                     x.Email = "noreply@elsolution.hr";
-                    x.Password = "Nes123456$";
+                    x.Password = "Nes******$";
                     x.EmailName = "El. Solution";
                     x.ServerHost = "mail.elsolution.hr";
                     x.ServerPort = 25;
@@ -59,11 +59,11 @@ namespace api.Data
                 case "apartmentverano":
                 // TODO: apartmentverano (not working)
                     x.Email = "info@igprog.hr";
-                    x.Password = "Ii123456$";
+                    x.Password = "Ii******$";
                     //x.EmailName = "IG PROG";
                     x.ServerHost = "mail.igprog.hr";
                     // x.Email = "info@apartmentverano.com";
-                    // x.Password = "Iav123456$";
+                    // x.Password = "Iav123456******$";
                     x.EmailName = "Apartment Verano";
                     // x.ServerHost = "mail.apartmentverano.com";
                     x.ServerPort = 25;
