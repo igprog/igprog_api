@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +39,10 @@ namespace api
             //                     });
             // });
 
+            // Connection to DB
+            services.AddDbContext<MailContext>(opt => 
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddCors();
 
             services.AddControllers();
@@ -46,7 +51,10 @@ namespace api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
             });
 
-            services.AddScoped<IMail, MailData>();
+
+             services.AddScoped<IMail, MailData>();
+            //services.AddScoped<IMail, SqlMail>();
+            // services.AddScoped<IMail, MailMock>();
 
         }
 
